@@ -28,7 +28,7 @@ struct Individual(uint LENGTH) {
         return [child1, child2];
     }
 
-    @property allele[LENGTH] genome() const pure nothrow { return _genome; }
+    @property auto ref allele[LENGTH] genome() const pure nothrow { return _genome; }
 
 private:
 
