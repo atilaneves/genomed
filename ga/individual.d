@@ -28,13 +28,18 @@ struct Individual(uint LENGTH) {
         return [child1, child2];
     }
 
-    void mutate(double rate) {
-        for(int i = 0; i < LENGTH; ++i) {
-            if(uniform(0.0, 1.0) < rate) {
-                _genome[i] ^= 1; //toggle
+    void mutate(double rate)
+        in {
+            assert(rate >= 0.0);
+            assert(rate <= 1.0);
+        }
+        body {
+            for(int i = 0; i < LENGTH; ++i) {
+                if(uniform(0.0, 1.0) < rate) {
+                    _genome[i] ^= 1; //toggle
+                }
             }
         }
-    }
 
     @property auto ref allele[LENGTH] genome() const pure nothrow { return _genome; }
 
