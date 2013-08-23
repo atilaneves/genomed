@@ -5,5 +5,5 @@ import unit_threaded.runner;
 
 
 int main(string[] args) {
-    return runTests!("xover")(args);
+    return runTests!("xover", "mutate")(args);
 }
