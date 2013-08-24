@@ -28,7 +28,7 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
 }
 
 private uint getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T)(
-    Individual!(genomeSize, T)[populationSize]* oldPopulation) {
+    Population!(populationSize, genomeSize, T)* oldPopulation) {
 
     uint participantIndices[numParticipants];
     foreach(ref i; participantIndices) {
