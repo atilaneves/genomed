@@ -2,7 +2,9 @@ module ga.algorithm;
 
 import ga.individual;
 import ga.selection;
+
 import std.stdio;
+import std.parallelism;
 
 
 struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC, T = bool) {
@@ -80,7 +82,8 @@ private:
         _otherPopulation = tmp;
     }
 
-    void calculateFitnesses() pure nothrow {
+    void calculateFitnesses() nothrow {
+        //foreach(ref ind; taskPool.parallel(*_currentPopulation)) {
         foreach(ref ind; *_currentPopulation) {
             ind.calculateFitness!(FITNESS_FUNC)();
         }

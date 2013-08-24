@@ -55,7 +55,7 @@ struct Individual(uint LENGTH, T = bool) {
 
 private:
 
-    GenomeType _genome;
+    GenomeType _genome = void;
     double _fitness;
 }
 
