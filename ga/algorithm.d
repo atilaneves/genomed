@@ -2,6 +2,7 @@ module ga.algorithm;
 
 import ga.individual;
 import ga.selection;
+import ga.util;
 
 import std.stdio;
 import std.algorithm;
@@ -48,7 +49,7 @@ private:
     }
 
     double getHighestFitness() const pure {
-        return minCount!("a > b")(getFitnesses())[0];
+        return maxElement(getFitnesses());
     }
 
     ref const(GenomeType) getFittest() const pure {

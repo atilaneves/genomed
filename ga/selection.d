@@ -1,6 +1,8 @@
 module ga.selection;
 
 import ga.individual;
+import ga.util;
+
 import std.random;
 import std.algorithm;
 
@@ -37,7 +39,7 @@ getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T
     }
 
     const indicesSlice = participantIndices[0..$];
-    immutable maxFitness = minCount!("a > b")(map!(a => population[a].fitness)(indicesSlice))[0];
+    immutable maxFitness = maxElement!(a => population[a].fitness)(indicesSlice);
     immutable winnerIndex = find!((a, b) => population[a].fitness == b)(indicesSlice, maxFitness)[0];
     return population[winnerIndex];
 }
