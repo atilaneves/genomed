@@ -8,7 +8,7 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
 
     alias Individual!(genomeSize, T) MyIndividual;
     alias MyIndividual.GenomeType GenomeType;
-    alias MyIndividual[populationSize] Population;
+    alias Population!(populationSize, genomeSize, T) MyPopulation;
 
     auto ref GenomeType run(double endFitness, double mutationRate) {
         init();
@@ -31,9 +31,9 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
 
 private:
 
-    Population[2] _populations;
-    Population* _currentPopulation;
-    Population* _otherPopulation;
+    MyPopulation[2] _populations;
+    MyPopulation* _currentPopulation;
+    MyPopulation* _otherPopulation;
     double[populationSize] _fitnesses;
 
     void init() {

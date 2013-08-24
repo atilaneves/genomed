@@ -52,3 +52,7 @@ private:
 
     GenomeType _genome;
 }
+
+template Population(uint populationSize, uint genomeSize, T = bool) {
+    alias Individual!(genomeSize, T)[populationSize] Population;
+}
