@@ -1,6 +1,7 @@
 module ga.algorithm;
 
 import ga.individual;
+import ga.selection;
 import std.stdio;
 
 
@@ -19,9 +20,9 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
             writeln("highest: ", getHighestFitness());
             printGeneration(generation);
 
-            foreach(ref ind; *_currentPopulation) {
-                ind.mutate(mutationRate);
-            }
+            tournament!(FITNESS_FUNC, 2)(_currentPopulation, _otherPopulation);
+
+            swapPopulations();
 
             generation++;
         }
@@ -74,5 +75,11 @@ private:
             writeln(ind.genome);
         }
         writeln();
+    }
+
+    void swapPopulations() nothrow {
+        MyPopulation* tmp = _currentPopulation;
+        _currentPopulation = _otherPopulation;
+        _otherPopulation = tmp;
     }
 }
