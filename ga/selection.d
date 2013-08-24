@@ -2,6 +2,7 @@ module ga.selection;
 
 import ga.individual;
 import std.random;
+import std.algorithm;
 
 
 void tournament(alias F, uint numParticipants = 2, uint populationSize, uint genomeSize, T)(
@@ -30,20 +31,13 @@ private ref const(Individual!(genomeSize, T))
 getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T)(
     ref const(Individual!(genomeSize, T)[populationSize]) population) {
 
-    uint participantIndices[numParticipants];
+    uint participantIndices[numParticipants] = void;
     foreach(ref i; participantIndices) {
         i = uniform(0, populationSize);
     }
 
-    double maxFitness = 0;
-    uint winnerIndex;
-    foreach(i; participantIndices) {
-        immutable fitness = F(population[i].genome);
-        if(fitness > maxFitness) {
-            maxFitness = fitness;
-            winnerIndex = i;
-        }
-    }
-
+    const indicesSlice = participantIndices[0..$];
+    immutable maxFitness = minCount!("a > b")(map!(a => population[a].fitness)(indicesSlice))[0];
+    immutable winnerIndex = find!((a, b) => population[a].fitness == b)(indicesSlice, maxFitness)[0];
     return population[winnerIndex];
 }

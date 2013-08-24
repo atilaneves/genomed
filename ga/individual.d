@@ -1,7 +1,7 @@
 module ga.individual;
 
 import std.random;
-
+import std.algorithm;
 
 struct Individual(uint LENGTH, T = bool) {
 
@@ -18,17 +18,10 @@ struct Individual(uint LENGTH, T = bool) {
         }
         body {
             auto child1 = Individual!LENGTH();
+            copy(other._genome[pos..$], copy(this._genome[0..pos], child1._genome[0..$]));
+
             auto child2 = Individual!LENGTH();
-
-            for(int i = 0; i < pos; ++i) {
-                child1._genome[i] = this._genome[i];
-                child2._genome[i] = other._genome[i];
-            }
-
-            for(int i = pos; i < LENGTH; ++i) {
-                child2._genome[i] = this._genome[i];
-                child1._genome[i] = other._genome[i];
-            }
+            copy(this._genome[pos..$], copy(other._genome[0..pos], child2._genome[0..$]));
 
             return [child1, child2];
         }

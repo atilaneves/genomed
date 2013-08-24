@@ -4,6 +4,7 @@ import ga.individual;
 import ga.selection;
 
 import std.stdio;
+import std.algorithm;
 import std.parallelism;
 
 
@@ -46,26 +47,19 @@ private:
         calculateFitnesses();
     }
 
-    double getHighestFitness() const pure nothrow {
-        double max = 0;
-        foreach(const ref ind; *_currentPopulation) {
-            if(ind.fitness > max) max = ind.fitness;
-        }
-
-        return max;
+    double getHighestFitness() const pure {
+        return minCount!("a > b")(getFitnesses())[0];
     }
 
-    ref const(GenomeType) getFittest() const pure nothrow {
-        double max = 0;
-        const(MyIndividual)* maxInd;
-        foreach(const ref ind; *_currentPopulation) {
-            if(ind.fitness > max) {
-                max = ind.fitness;
-                maxInd = &ind;
-            }
-        }
+    ref const(GenomeType) getFittest() const pure {
+        const haystack = (*_currentPopulation)[0..$];
+        immutable max = getHighestFitness();
+        return find!((a, b) => a.fitness >= b)(haystack, max)[0].genome;
 
-        return (*maxInd).genome;
+    }
+
+    auto getFitnesses() const pure {
+        return map!(a => a.fitness)((*_currentPopulation)[0..$]);
     }
 
     void printGeneration(uint generation) const {
