@@ -1,4 +1,4 @@
 genomed
 =============
 
-Multi-thread Genetic Algorithms library for D.
+Multi-threaded Genetic Algorithms library for D.
