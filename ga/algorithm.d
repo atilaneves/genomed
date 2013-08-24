@@ -15,19 +15,22 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
         init();
 
         uint generation = 0;
-        writeln("highest: ", getHighestFitness());
+
         while(getHighestFitness() < endFitness) {
-            writeln("highest: ", getHighestFitness());
             printGeneration(generation);
 
-            tournament!(FITNESS_FUNC, 2)(_currentPopulation, _otherPopulation);
-
+            tournament!(FITNESS_FUNC, 2)(mutationRate, _currentPopulation, _otherPopulation);
             swapPopulations();
+
+            foreach(i, ref ind; *_currentPopulation) {
+                _fitnesses[i] = FITNESS_FUNC(ind.genome);
+            }
 
             generation++;
         }
 
-        return MyIndividual().genome;
+        printGeneration(generation);
+        return getFittest();
     }
 
 private:
@@ -43,7 +46,6 @@ private:
 
         foreach(i, ref fitness; _fitnesses) {
             fitness = FITNESS_FUNC((*_currentPopulation)[i].genome);
-            writeln("fitness", i, ": ", fitness);
         }
     }
 
@@ -57,7 +59,7 @@ private:
     }
 
     auto ref GenomeType getFittest() const pure nothrow {
-        double max;
+        double max = 0;
         ulong maxi;
         foreach(i, fitness; _fitnesses) {
             if(fitness > max) {

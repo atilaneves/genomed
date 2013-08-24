@@ -4,8 +4,7 @@ import ga.individual;
 import std.random;
 
 void tournament(alias F, uint numParticipants = 2, uint populationSize, uint genomeSize, T)(
-    // Population!(populationSize, genomeSize, T)* oldPopulation,
-    // Population!(populationSize, genomeSize, T)* newPopulation) {
+    double mutationRate,
     Individual!(genomeSize, T)[populationSize]* oldPopulation,
     Individual!(genomeSize, T)[populationSize]* newPopulation) {
 
@@ -19,7 +18,8 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
         const mother = (*oldPopulation)[motherIndex];
 
         immutable xoverPoint = uniform(0, genomeSize);
-        immutable children = father.crossover(mother, xoverPoint);
+        auto children = father.crossover(mother, xoverPoint);
+        foreach(ref child; children) child.mutate(mutationRate);
 
         (*newPopulation)[index++] = children[0];
         (*newPopulation)[index++] = children[1];
@@ -28,7 +28,7 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
 }
 
 private uint getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T)(
-    Population!(populationSize, genomeSize, T)* oldPopulation) {
+    Individual!(genomeSize, T)[populationSize]* oldPopulation) {
 
     uint participantIndices[numParticipants];
     foreach(ref i; participantIndices) {

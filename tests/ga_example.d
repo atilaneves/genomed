@@ -15,7 +15,7 @@ void main() {
     enum genomeSize = 12;
     auto ga = GeneticAlgorithm!(populationSize, genomeSize, calcFitness)();
     enum endFitness = genomeSize;
-    enum mutationRate = 0.5;
+    enum mutationRate = 0.05;
     immutable winner = ga.run(endFitness, mutationRate);
 
     writeln("Individual of fitness ", calcFitness(winner), " is ", winner);
