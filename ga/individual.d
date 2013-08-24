@@ -3,11 +3,12 @@ module ga.individual;
 import std.random;
 
 
-struct Individual(uint LENGTH) {
+struct Individual(uint LENGTH, T = bool) {
 
-    alias bool allele;
+    alias T allele;
+    alias allele[LENGTH] GenomeType;
 
-    this(allele[LENGTH] genome) {
+    this(GenomeType genome) {
         _genome = genome;
     }
 
@@ -45,9 +46,9 @@ struct Individual(uint LENGTH) {
             }
         }
 
-    @property auto ref allele[LENGTH] genome() const pure nothrow { return _genome; }
+    @property auto ref GenomeType genome() const pure nothrow { return _genome; }
 
 private:
 
-    allele[LENGTH] _genome;
+    GenomeType _genome;
 }
