@@ -46,11 +46,17 @@ struct Individual(uint LENGTH, T = bool) {
             }
         }
 
+    void calculateFitness(alias F)() pure nothrow {
+        _fitness = F(_genome);
+    }
+
     @property auto ref GenomeType genome() const pure nothrow { return _genome; }
+    @property double fitness() const pure nothrow { return _fitness; }
 
 private:
 
     GenomeType _genome;
+    double _fitness;
 }
 
 template Population(uint populationSize, uint genomeSize, T = bool) {

@@ -3,10 +3,12 @@ module ga.selection;
 import ga.individual;
 import std.random;
 
+
 void tournament(alias F, uint numParticipants = 2, uint populationSize, uint genomeSize, T)(
     double mutationRate,
     ref const(Individual!(genomeSize, T)[populationSize]) oldPopulation,
-    ref Individual!(genomeSize, T)[populationSize] newPopulation) {
+    ref Individual!(genomeSize, T)[populationSize] newPopulation)
+{
 
     uint index;
 

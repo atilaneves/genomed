@@ -22,10 +22,7 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
             enum numParticipants = 2;
             tournament!(FITNESS_FUNC, numParticipants)(mutationRate, *_currentPopulation, *_otherPopulation);
             swapPopulations();
-
-            foreach(i, ref ind; *_currentPopulation) {
-                _fitnesses[i] = FITNESS_FUNC(ind.genome);
-            }
+            calculateFitnesses();
 
             generation++;
         }
@@ -39,21 +36,18 @@ private:
     MyPopulation[2] _populations;
     MyPopulation* _currentPopulation;
     MyPopulation* _otherPopulation;
-    double[populationSize] _fitnesses;
 
     void init() {
         _currentPopulation = &_populations[0];
         _otherPopulation   = &_populations[1];
 
-        foreach(i, ref fitness; _fitnesses) {
-            fitness = FITNESS_FUNC((*_currentPopulation)[i].genome);
-        }
+        calculateFitnesses();
     }
 
     double getHighestFitness() const pure nothrow {
         double max = 0;
-        foreach(fitness; _fitnesses) {
-            if(fitness > max) max = fitness;
+        foreach(const ref ind; *_currentPopulation) {
+            if(ind.fitness > max) max = ind.fitness;
         }
 
         return max;
@@ -61,15 +55,15 @@ private:
 
     ref const(GenomeType) getFittest() const pure nothrow {
         double max = 0;
-        ulong maxi;
-        foreach(i, fitness; _fitnesses) {
-            if(fitness > max) {
-                max = fitness;
-                maxi = i;
+        const(MyIndividual)* maxInd;
+        foreach(const ref ind; *_currentPopulation) {
+            if(ind.fitness > max) {
+                max = ind.fitness;
+                maxInd = &ind;
             }
         }
 
-        return (*_currentPopulation)[maxi].genome;
+        return (*maxInd).genome;
     }
 
     void printGeneration(uint generation) const {
@@ -84,5 +78,11 @@ private:
         MyPopulation* tmp = _currentPopulation;
         _currentPopulation = _otherPopulation;
         _otherPopulation = tmp;
+    }
+
+    void calculateFitnesses() pure nothrow {
+        foreach(ref ind; *_currentPopulation) {
+            ind.calculateFitness!(FITNESS_FUNC)();
+        }
     }
 }
