@@ -11,7 +11,7 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
     alias MyIndividual.GenomeType GenomeType;
     alias Population!(populationSize, genomeSize, T) MyPopulation;
 
-    auto ref GenomeType run(double endFitness, double mutationRate) {
+    ref const(GenomeType) run(double endFitness, double mutationRate) {
         init();
 
         uint generation = 0;
@@ -58,7 +58,7 @@ private:
         return max;
     }
 
-    auto ref GenomeType getFittest() const pure nothrow {
+    ref const(GenomeType) getFittest() const pure nothrow {
         double max = 0;
         ulong maxi;
         foreach(i, fitness; _fitnesses) {

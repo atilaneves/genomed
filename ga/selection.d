@@ -11,11 +11,8 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
     uint index;
 
     while(index < populationSize) {
-        immutable fatherIndex = getWinner!(F, numParticipants)(oldPopulation);
-        const father = (*oldPopulation)[fatherIndex];
-
-        immutable motherIndex = getWinner!(F, numParticipants)(oldPopulation);
-        const mother = (*oldPopulation)[motherIndex];
+        const father = getWinner!(F, numParticipants)(oldPopulation);
+        const mother = getWinner!(F, numParticipants)(oldPopulation);
 
         immutable xoverPoint = uniform(0, genomeSize);
         auto children = father.crossover(mother, xoverPoint);
@@ -27,8 +24,9 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
 
 }
 
-private uint getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T)(
-    Individual!(genomeSize, T)[populationSize]* oldPopulation) {
+private ref const(Individual!(genomeSize, T))
+getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T)(
+    Individual!(genomeSize, T)[populationSize]* population) {
 
     uint participantIndices[numParticipants];
     foreach(ref i; participantIndices) {
@@ -36,14 +34,14 @@ private uint getWinner(alias F, uint numParticipants, uint populationSize, uint 
     }
 
     double maxFitness = 0;
-    uint winner;
+    uint winnerIndex;
     foreach(i; participantIndices) {
-        immutable fitness = F((*oldPopulation)[i].genome);
+        immutable fitness = F((*population)[i].genome);
         if(fitness > maxFitness) {
             maxFitness = fitness;
-            winner = i;
+            winnerIndex = i;
         }
     }
 
-    return winner;
+    return (*population)[winnerIndex];
 }
