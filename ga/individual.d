@@ -11,22 +11,26 @@ struct Individual(uint LENGTH) {
         _genome = genome;
     }
 
-    Individual[2] crossover(const ref Individual other, uint pos) const {
-        auto child1 = Individual!LENGTH();
-        auto child2 = Individual!LENGTH();
-
-        for(int i = 0; i < pos; ++i) {
-            child1._genome[i] = this._genome[i];
-            child2._genome[i] = other._genome[i];
+    Individual[2] crossover(const ref Individual other, uint pos) const
+        in {
+            assert(pos < LENGTH);
         }
+        body {
+            auto child1 = Individual!LENGTH();
+            auto child2 = Individual!LENGTH();
 
-        for(int i = pos; i < LENGTH; ++i) {
-            child2._genome[i] = this._genome[i];
-            child1._genome[i] = other._genome[i];
+            for(int i = 0; i < pos; ++i) {
+                child1._genome[i] = this._genome[i];
+                child2._genome[i] = other._genome[i];
+            }
+
+            for(int i = pos; i < LENGTH; ++i) {
+                child2._genome[i] = this._genome[i];
+                child1._genome[i] = other._genome[i];
+            }
+
+            return [child1, child2];
         }
-
-        return [child1, child2];
-    }
 
     void mutate(double rate)
         in {
