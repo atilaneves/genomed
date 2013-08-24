@@ -5,8 +5,8 @@ import std.random;
 
 void tournament(alias F, uint numParticipants = 2, uint populationSize, uint genomeSize, T)(
     double mutationRate,
-    Individual!(genomeSize, T)[populationSize]* oldPopulation,
-    Individual!(genomeSize, T)[populationSize]* newPopulation) {
+    ref const(Individual!(genomeSize, T)[populationSize]) oldPopulation,
+    ref Individual!(genomeSize, T)[populationSize] newPopulation) {
 
     uint index;
 
@@ -18,15 +18,15 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
         auto children = father.crossover(mother, xoverPoint);
         foreach(ref child; children) child.mutate(mutationRate);
 
-        (*newPopulation)[index++] = children[0];
-        (*newPopulation)[index++] = children[1];
+        newPopulation[index++] = children[0];
+        newPopulation[index++] = children[1];
     }
 
 }
 
 private ref const(Individual!(genomeSize, T))
 getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T)(
-    Individual!(genomeSize, T)[populationSize]* population) {
+    ref const(Individual!(genomeSize, T)[populationSize]) population) {
 
     uint participantIndices[numParticipants];
     foreach(ref i; participantIndices) {
@@ -36,12 +36,12 @@ getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T
     double maxFitness = 0;
     uint winnerIndex;
     foreach(i; participantIndices) {
-        immutable fitness = F((*population)[i].genome);
+        immutable fitness = F(population[i].genome);
         if(fitness > maxFitness) {
             maxFitness = fitness;
             winnerIndex = i;
         }
     }
 
-    return (*population)[winnerIndex];
+    return population[winnerIndex];
 }

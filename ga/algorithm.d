@@ -19,7 +19,8 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
         while(getHighestFitness() < endFitness) {
             printGeneration(generation);
 
-            tournament!(FITNESS_FUNC, 2)(mutationRate, _currentPopulation, _otherPopulation);
+            enum numParticipants = 2;
+            tournament!(FITNESS_FUNC, numParticipants)(mutationRate, *_currentPopulation, *_otherPopulation);
             swapPopulations();
 
             foreach(i, ref ind; *_currentPopulation) {
