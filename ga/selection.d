@@ -7,7 +7,7 @@ import std.random;
 import std.algorithm;
 
 
-void tournament(alias F, uint numParticipants = 2, uint populationSize, uint genomeSize, T)(
+void tournament(uint numParticipants = 2, uint populationSize, uint genomeSize, T)(
     double mutationRate,
     ref const(Individual!(genomeSize, T)[populationSize]) oldPopulation,
     ref Individual!(genomeSize, T)[populationSize] newPopulation)
@@ -16,8 +16,8 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
     uint index;
 
     while(index < populationSize) {
-        const father = getWinner!(F, numParticipants)(oldPopulation);
-        const mother = getWinner!(F, numParticipants)(oldPopulation);
+        const father = getWinner!(numParticipants)(oldPopulation);
+        const mother = getWinner!(numParticipants)(oldPopulation);
 
         immutable xoverPoint = uniform(0, genomeSize);
         auto children = father.crossover(mother, xoverPoint);
@@ -30,7 +30,7 @@ void tournament(alias F, uint numParticipants = 2, uint populationSize, uint gen
 }
 
 private ref const(Individual!(genomeSize, T))
-getWinner(alias F, uint numParticipants, uint populationSize, uint genomeSize, T)(
+getWinner(uint numParticipants, uint populationSize, uint genomeSize, T)(
     ref const(Individual!(genomeSize, T)[populationSize]) population) {
 
     uint participantIndices[numParticipants] = void;

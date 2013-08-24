@@ -24,7 +24,7 @@ struct GeneticAlgorithm(uint populationSize, uint genomeSize, alias FITNESS_FUNC
             printGeneration(generation);
 
             enum numParticipants = 2;
-            tournament!(FITNESS_FUNC, numParticipants)(mutationRate, *_currentPopulation, *_otherPopulation);
+            tournament!(numParticipants)(mutationRate, *_currentPopulation, *_otherPopulation);
             swapPopulations();
             calculateFitnesses();
 
