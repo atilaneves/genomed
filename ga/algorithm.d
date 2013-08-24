@@ -77,9 +77,8 @@ private:
         _otherPopulation = tmp;
     }
 
-    void calculateFitnesses() nothrow {
-        //foreach(ref ind; taskPool.parallel(*_currentPopulation)) {
-        foreach(ref ind; *_currentPopulation) {
+    void calculateFitnesses() {
+        foreach(ref ind; taskPool.parallel((*_currentPopulation)[0..$])) {
             ind.calculateFitness!(FITNESS_FUNC)();
         }
     }
