@@ -1,0 +1,3 @@
+[submodule "tests/unit-threaded"]
+	path = tests/unit-threaded
+	url = https://github.com/atilaneves/unit-threaded.git
