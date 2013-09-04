@@ -52,6 +52,6 @@ private:
     double _fitness;
 }
 
-template Population(uint populationSize, uint genomeSize, T = bool) {
-    alias Individual!(genomeSize, T)[populationSize] Population;
+template Population(uint genomeSize, T = bool) {
+    alias Individual!(genomeSize, T)[] Population;
 }

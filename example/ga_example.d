@@ -13,7 +13,7 @@ double calcFitness(uint LENGTH)(const ref bool[LENGTH] genome) {
 void main() {
     enum populationSize = 20;
     enum genomeSize = 12;
-    auto ga = GeneticAlgorithm!(populationSize, genomeSize, calcFitness)();
+    auto ga = GeneticAlgorithm!(genomeSize, calcFitness)(populationSize);
     enum endFitness = genomeSize;
     enum mutationRate = 0.05;
     immutable winner = ga.run(endFitness, mutationRate);

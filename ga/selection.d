@@ -7,15 +7,15 @@ import std.random;
 import std.algorithm;
 
 
-void tournament(uint numParticipants = 2, uint populationSize, uint genomeSize, T)(
-    double mutationRate,
-    ref const(Individual!(genomeSize, T)[populationSize]) oldPopulation,
-    ref Individual!(genomeSize, T)[populationSize] newPopulation)
+void tournament(uint numParticipants = 2, uint genomeSize, T)(
+    in double mutationRate,
+    in Individual!(genomeSize, T)[] oldPopulation,
+    Individual!(genomeSize, T)[]  newPopulation)
 {
 
     uint index;
 
-    while(index < populationSize) {
+    while(index < oldPopulation.length) {
         const father = getWinner!(numParticipants)(oldPopulation);
         const mother = getWinner!(numParticipants)(oldPopulation);
 
@@ -30,12 +30,11 @@ void tournament(uint numParticipants = 2, uint populationSize, uint genomeSize, 
 }
 
 private ref const(Individual!(genomeSize, T))
-getWinner(uint numParticipants, uint populationSize, uint genomeSize, T)(
-    ref const(Individual!(genomeSize, T)[populationSize]) population) {
+getWinner(uint numParticipants, uint genomeSize, T)(in Individual!(genomeSize, T)[] population) {
 
-    uint participantIndices[numParticipants] = void;
+    ulong participantIndices[numParticipants] = void;
     foreach(ref i; participantIndices) {
-        i = uniform(0, populationSize);
+        i = uniform(0, population.length);
     }
 
     const indicesSlice = participantIndices[0..$];
